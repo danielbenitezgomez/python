@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+<link rel="icon" type="image/x-icon" href="logo.ico">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Test Bloque 01 - Python (5 preguntas)</title>
+<style>
+  body{font-family:system-ui,Segoe UI,Roboto,Arial;max-width:900px;margin:24px auto;padding:12px;}
+  h1{font-size:1.6rem;margin-bottom:6px;}
+  .card{border:1px solid #ddd;padding:14px;border-radius:8px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+  .q{margin-bottom:8px;}
+  .options label{display:block;margin:6px 0;padding:6px;border-radius:6px;cursor:pointer;}
+  .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:none;background:#1f6feb;color:white;cursor:pointer;font-weight:600;}
+  .result{margin-top:12px;padding:10px;border-radius:8px;}
+  .correct{background:#e6ffed;border:1px solid #8ae39a;}
+  .wrong{background:#ffecec;border:1px solid #ff8a8a;}
+  .feedback{margin-top:8px;font-size:0.95rem;}
+  footer{margin-top:18px;font-size:0.85rem;color:#555;}
+</style>
+</head>
+<body>
+  <h1>Test corto — Bloque 01 (Python)</h1>
+  <p>5 preguntas. Marca una opción por pregunta y pulsa <strong>Comprobar respuestas</strong>.</p>
+
+  <form id="quizForm">
+    <!-- Pregunta 1 -->
+    <div class="card">
+      <div class="q"><strong>1.</strong> ¿Quién creó Python y en qué año fue creado?</div>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a"> James Gosling, 1995</label>
+        <label><input type="radio" name="q1" value="b"> Guido van Rossum, 1991</label>
+        <label><input type="radio" name="q1" value="c"> Bjarne Stroustrup, 1985</label>
+        <label><input type="radio" name="q1" value="d"> Brendan Eich, 1996</label>
+      </div>
+      <div id="fb1" class="feedback"></div>
+    </div>
+
+    <!-- Pregunta 2 -->
+    <div class="card">
+      <div class="q"><strong>2.</strong> ¿Qué función se usa para mostrar texto en la consola en Python?</div>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a"> echo()</label>
+        <label><input type="radio" name="q2" value="b"> console.log()</label>
+        <label><input type="radio" name="q2" value="c"> print()</label>
+        <label><input type="radio" name="q2" value="d"> display()</label>
+      </div>
+      <div id="fb2" class="feedback"></div>
+    </div>
+
+    <!-- Pregunta 3 -->
+    <div class="card">
+      <div class="q"><strong>3.</strong> Si haces input() al usuario, ¿qué tipo de dato obtienes inicialmente?</div>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a"> int</label>
+        <label><input type="radio" name="q3" value="b"> float</label>
+        <label><input type="radio" name="q3" value="c"> str</label>
+        <label><input type="radio" name="q3" value="d"> bool</label>
+      </div>
+      <div id="fb3" class="feedback"></div>
+    </div>
+
+    <!-- Pregunta 4 -->
+    <div class="card">
+      <div class="q"><strong>4.</strong> ¿Cuál de estos operadores en Python calcula el resto de una división?</div>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a"> //</label>
+        <label><input type="radio" name="q4" value="b"> %</label>
+        <label><input type="radio" name="q4" value="c"> **</label>
+        <label><input type="radio" name="q4" value="d"> &lt;&lt;</label>
+      </div>
+      <div id="fb4" class="feedback"></div>
+    </div>
+
+    <!-- Pregunta 5 -->
+    <div class="card">
+      <div class="q"><strong>5.</strong> ¿Qué sentencia se usa para terminar inmediatamente un bucle en Python?</div>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a"> stop</label>
+        <label><input type="radio" name="q5" value="b"> break</label>
+        <label><input type="radio" name="q5" value="c"> continue</label>
+        <label><input type="radio" name="q5" value="d"> exit</label>
+      </div>
+      <div id="fb5" class="feedback"></div>
+    </div>
+
+    <button type="button" id="checkBtn" class="btn">Comprobar respuestas</button>
+    <div id="final" class="result" style="display:none;"></div>
+    <br>
+    <button type="button" id="retryBtn" class="btn" style="display:none;background: rgb(21, 255, 0);">
+      <img src="refrescar.png" alt="Reintentar" style="width:20px; height:20px; vertical-align:middle; margin-right:5px;">
+      Intentar de nuevo</button>
+
+  </form>
+
+<script>
+  const correct = {
+    q1: 'b',
+    q2: 'c',
+    q3: 'c',
+    q4: 'b',
+    q5: 'b'
+  };
+
+  const checkBtn = document.getElementById('checkBtn');
+  const retryBtn = document.getElementById('retryBtn');
+  const finalDiv = document.getElementById('final');
+
+  // Comprobar respuestas
+  checkBtn.addEventListener('click', function () {
+    let score = 0;
+    const total = Object.keys(correct).length;
+
+    // Revisar cada pregunta
+    for (let i = 1; i <= total; i++) {
+      const name = 'q' + i;
+      const radios = document.getElementsByName(name);
+      let selected = null;
+      for (const r of radios) {
+        if (r.checked) { selected = r.value; break; }
+      }
+      const fb = document.getElementById('fb' + i);
+      fb.innerHTML = '';
+      fb.parentElement.classList.remove('correct', 'wrong');
+
+      if (selected === null) {
+        fb.innerHTML = '<em>No has respondido esta pregunta.</em>';
+        fb.parentElement.classList.add('wrong');
+        continue;
+      }
+
+      if (selected === correct[name]) {
+        score += 1;
+        fb.innerHTML = '✔ Respuesta correcta.';
+        fb.parentElement.classList.add('correct');
+      } else {
+        fb.innerHTML = '✖ Respuesta incorrecta.';
+        fb.parentElement.classList.add('wrong');
+      }
+    }
+
+    // Mostrar resultado final
+    finalDiv.style.display = 'block';
+    finalDiv.innerHTML = `<strong>Resultado:</strong> ${score} / ${total}.`;
+
+    if (score === total) {
+      finalDiv.className = 'result correct';
+      finalDiv.innerHTML += ' ¡Perfecto! Dominio claro de los conceptos básicos.';
+    } else if (score >= Math.ceil(total * 0.6)) {
+      finalDiv.className = 'result correct';
+      finalDiv.innerHTML += ' Bien — repasa detalles para mejorar.';
+    } else {
+      finalDiv.className = 'result wrong';
+      finalDiv.innerHTML += ' Tienes que repasar las unidades del bloque 1.';
+    }
+
+    // Mostrar botón de reinicio
+    retryBtn.style.display = 'inline-block';
+    finalDiv.scrollIntoView({behavior: 'smooth'});
+  });
+
+  // Reiniciar test
+  retryBtn.addEventListener('click', function() {
+    document.getElementById('quizForm').reset();
+
+    // Limpiar clases y feedbacks
+    for (let i = 1; i <= Object.keys(correct).length; i++) {
+      const fb = document.getElementById('fb' + i);
+      fb.innerHTML = '';
+      fb.parentElement.classList.remove('correct', 'wrong');
+    }
+
+    finalDiv.style.display = 'none';
+    retryBtn.style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+<footer>Preguntas basadas en el material del Bloque 01 del curso.</footer>
+</body>
+</html>
